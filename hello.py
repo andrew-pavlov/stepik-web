@@ -1,6 +1,6 @@
 def app(env, start_response):
   status = '200 OK'
   headers = [('Content-Type', 'text/plain')]
-  body = 'Hello, world!'
+  body = env['wsgi.version']
   start_response(status, headers)
-  return [body]
+  return [bytes(body, 'utf-8')]
