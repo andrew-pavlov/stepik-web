@@ -18,3 +18,12 @@ class AskForm(forms.Form):
 class AnswerForm(forms.Form):
   text = forms.CharField()
   question = forms.IntegerField()
+
+  def clean(self):
+    return self.cleaned_data
+
+  def save(self):
+    answer = Answer(**self.cleaned_data)
+    answer.author_id = 1
+    answer.save()
+    return answer

@@ -34,21 +34,28 @@ def popular(request):
 def question(request, id):
   question = get_object_or_404(Question, id=id)
   answers = question.answer_set.all()
+  if request.method == 'POST':
+    form = AnswerForm(request.POST)
+    if form.is_valid():
+      answer = form.save()
+      url = question.get_url()
+      return HttpResposeRedirect(url)
+  else:
+    form = AnswerForm()
+  
   return render(request, 'question.html', {
     'question': question,
     'answers': answers,
+    'form': form
   })
 
 def ask(request):
   if request.method == 'POST':
     form = AskForm(request.POST)
     if form.is_valid():
-      print 'valid'
       question = form.save()
       url = question.get_url()
       return HttpResponseRedirect(url)
-    else:
-      print 'not valid'
   else:
     form = AskForm()
   return render(request, 'ask.html', {

@@ -4,3 +4,8 @@
 {% for a in answers %}
   <br>{{ a }}
 {% endfor %}
+
+<form method="POST">
+{% csrf_token %}
+{{ form.as_ul }}
+</form>
