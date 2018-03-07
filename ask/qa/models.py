@@ -22,7 +22,7 @@ class Question(models.Model):
   objects = QuestionManager()
 
   def get_url(self):
-    return reverse('question', kwargs={'id': id})
+    return reverse('question', kwargs={'id': self.id})
 
   def __unicode__(self):
     return self.title
