@@ -9,9 +9,9 @@ class AskForm(forms.Form):
   def clean(self):
     return self.cleaned_data
 
-  def save(self):
+  def save(self, user):
     question = Question(**self.cleaned_data)
-    question.author_id = 1
+    question.author = user
     question.save()
     return question
 
@@ -22,9 +22,9 @@ class AnswerForm(forms.Form):
   def clean(self):
     return self.cleaned_data
 
-  def save(self):
+  def save(self, user):
     answer = Answer(**self.cleaned_data)
-    answer.author_id = 1
+    answer.author = user
     answer.save()
     return answer
 
