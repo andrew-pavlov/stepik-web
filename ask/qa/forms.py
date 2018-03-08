@@ -37,6 +37,13 @@ class SignupForm(forms.Form):
     return self.cleaned_data
 
   def save(self):
-    user = User(**self.cleaned_data)
+    user = User.objects.create_user(**self.cleaned_data)
     user.save()
     return user
+
+class LoginForm(forms.Form):
+  username = forms.CharField()
+  password = forms.CharField(widget=forms.PasswordInput)
+
+  def clean(self):
+    return self.cleaned_data

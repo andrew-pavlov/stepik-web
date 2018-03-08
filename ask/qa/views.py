@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from qa.models import Question, Answer
-from qa.forms import AskForm, AnswerForm, SignupForm
+from qa.forms import AskForm, AnswerForm, SignupForm, LoginForm
 
 def test(request, *args, **kwargs):
   return HttpResponse('OK')
@@ -69,17 +69,26 @@ def signup(request):
     form = SignupForm(request.POST)
     if form.is_valid():
       user = form.save()
-      print user
-      username = form.cleaned_data["username"]
-      password = form.cleaned_data["password"]
-      print form.cleaned_data
-      print username, password
-      user = authenticate(username=username, password=password)
-      print user
-      #if user:
-      return HttpResponseRedirect('/')
+      user = authenticate(**form.cleaned_data)
+      if user:
+        login(request, user)
+        return HttpResponseRedirect('/')
   else:
     form = SignupForm()
   return render(request, 'signup.html', {
+    'form': form,
+  })
+
+def login_view(request):
+  if request.method == 'POST':
+    form = LoginForm(request.POST)
+    if form.is_valid():
+      user = authenticate(**form.cleaned_data)
+      if user:
+        login(request, user)
+        return HttpResponseRedirect('/')
+  else:
+    form = LoginForm()
+  return render(request, 'login.html', {
     'form': form,
   })
