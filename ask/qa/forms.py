@@ -27,3 +27,16 @@ class AnswerForm(forms.Form):
     answer.author_id = 1
     answer.save()
     return answer
+
+class SignupForm(forms.Form):
+  username = forms.CharField()
+  email = forms.EmailField()
+  password = forms.CharField(widget=forms.PasswordInput)
+
+  def clean(self):
+    return self.cleaned_data
+
+  def save(self):
+    user = User(**self.cleaned_data)
+    user.save()
+    return user
